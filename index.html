@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoSTAR Prompt Builder – Postnatal Fitness</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 2rem 1rem 4rem;
+      max-width: 900px;
+      margin-inline: auto;
+      line-height: 1.6;
+    }
+
+    h1 {
+      margin-bottom: 0.25rem;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+    }
+
+    p {
+      margin-top: 0;
+      color: #666;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+      margin-block: 2rem;
+      padding: 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background: rgba(250, 250, 250, 0.6);
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #bbb;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.85);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    button {
+      width: fit-content;
+      padding: 0.7rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      background: #6c63ff;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 20px -15px rgba(108, 99, 255, 0.75);
+      outline: none;
+    }
+
+    button:disabled {
+      background: #bbb;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    section#output {
+      border: 1px solid #ccc;
+      padding: 1.5rem;
+      border-radius: 12px;
+      white-space: pre-wrap;
+      background: rgba(255, 255, 255, 0.7);
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .hint {
+      font-size: 0.9rem;
+      color: #5f5f5f;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>CoSTAR Prompt Builder</h1>
+    <p>Generate an empathetic, medically safe prompt tailored for post-delivery women.</p>
+
+    <form id="prompt-form">
+      <div>
+        <label for="user_age">User Age</label>
+        <input id="user_age" type="number" name="user_age" placeholder="e.g., 32" min="16" max="70" required />
+      </div>
+
+      <div>
+        <label for="delivery_type">Delivery Type</label>
+        <select id="delivery_type" name="delivery_type" required>
+          <option value="">Choose an option</option>
+          <option value="vaginal delivery">Vaginal delivery</option>
+          <option value="Cesarean section">Cesarean section</option>
+          <option value="assisted vaginal delivery">Assisted vaginal delivery</option>
+          <option value="water birth">Water birth</option>
+          <option value="delivery_type">Other / prefer not to say</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="goal">Primary Goal</label>
+        <select id="goal" name="goal" required>
+          <option value="">Choose a goal</option>
+          <option value="gentle strength recovery">Gentle strength recovery</option>
+          <option value="emotional wellness support">Emotional wellness support</option>
+          <option value="gentle movement consistency">Gentle movement consistency</option>
+          <option value="core and pelvic floor reconnection">Core and pelvic floor reconnection</option>
+          <option value="goal">Custom goal</option>
+        </select>
+        <p class="hint">Select “Custom goal” and add details in Focus Areas if needed.</p>
+      </div>
+
+      <div>
+        <label for="duration">Program Duration</label>
+        <input id="duration" type="text" name="duration" placeholder="e.g., 6 weeks, 3 months" required />
+      </div>
+
+      <div>
+        <label for="focus_areas">Focus Areas</label>
+        <textarea
+          id="focus_areas"
+          name="focus_areas"
+          placeholder="e.g., gentle workouts, emotional well-being, hydration tracking"
+          required
+        ></textarea>
+        <p class="hint">Separate multiple areas with commas.</p>
+      </div>
+
+      <button type="submit">Generate Prompt</button>
+    </form>
+
+    <section id="output" aria-live="polite">
+      Your CoSTAR prompt will appear here.
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById("prompt-form");
+    const output = document.getElementById("output");
+
+    const template = ({ user_age, delivery_type, goal, duration, focus_areas }) => `**Context:** You are a compassionate postpartum fitness companion guiding a woman aged ${user_age}, ${duration} into her recovery journey, approximately 3–12 months after a ${delivery_type}. She seeks trustworthy, gentle support to rebuild strength, stabilize mood, and develop sustainable habits aligned with ${goal} while honoring her body’s healing pace.
+
+**Objective:** Deliver a personalized, medically safe fitness-tracking plan that balances movement, rest, emotional well-being, and nutrition across the chosen ${duration}, keeping ${focus_areas} front and center.
+
+**Steps:**
+1. Gently confirm current recovery status, energy levels, and any provider guidance or contraindications.
+2. Outline weekly themes and daily touchpoints that emphasize low-impact movement, pelvic-floor/core awareness, and restorative practices.
+3. Suggest trackable metrics (energy, mood, hydration, sleep, gentle activity minutes) with flexible targets that respect postpartum variability.
+4. Integrate mindset prompts, micro-celebrations, and reminders to rest, nourish, and seek professional care when uncertain.
+5. Provide optional adjustments for differing energy days, changes in ${goal}, or progress pacing.
+
+**Tools:** Reference up-to-date postpartum recommendations (e.g., WHO, ACOG), evidence-based gentle exercise lists, mindful breathing techniques, and nutrition guidance suitable for lactating or recovering bodies. Present information in clear Markdown sections or chatbot-ready snippets for easy app integration.
+
+**Actions:** Produce a supportive, encouraging plan with headings, bullet points, and brief explanations. Include safety reminders, “check with your provider” cues, and adaptable modules that the app can toggle based on user feedback. Maintain an empathetic, non-judgmental tone that celebrates small wins.
+
+**Reflection:** Before concluding, verify the plan uses inclusive language, honors postpartum limitations, and avoids strenuous or contraindicated activities. Double-check that guidance can flex for different ${goal} and ${duration} settings, then briefly note any assumptions or follow-up questions to confirm with the user.`;
+
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      const resolvedDeliveryType =
+        data.delivery_type === "delivery_type" ? "{delivery_type}" : data.delivery_type;
+      const resolvedGoal = data.goal === "goal" ? "{goal}" : data.goal;
+
+      const focusAreas = data.focus_areas
+        .split(",")
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .join(", ");
+
+      const filledTemplate = template({
+        user_age: data.user_age || "{user_age}",
+        delivery_type: resolvedDeliveryType || "{delivery_type}",
+        goal: resolvedGoal || "{goal}",
+        duration: data.duration || "{duration}",
+        focus_areas: focusAreas || "{focus_areas}",
+      });
+
+      output.textContent = filledTemplate;
+    }
+
+    form.addEventListener("submit", handleSubmit);
+  </script>
+</body>
+</html>
